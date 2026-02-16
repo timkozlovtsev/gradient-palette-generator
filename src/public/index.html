@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="./output.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="flex flex-col overflow-hidden h-screen">
+        <div id="nav" class="flex justify-center h-16 items-center gap-16 bg-gray-100">
+            <a href="#" data-enabled class="data-enabled:text-blue-700 font-bold">Editor</span>
+                <a href="#" class="data-enabled:text-blue-700 font-bold"></a>Export</span>
+                <a href="#" class="data-enabled:text-blue-700 font-bold"></a>Gallery</span>
+        </div>
+        <div id="editor" class="grid grid-cols-3 gap-4 grow">
+            <div id="settings">
+                <div class="flex items-center">
+                    <span class="flex h-8 items-center">x:
+                        <input id="palette-input-size-x" class="w-full m-1" />
+                    </span>
+                    <span class="flex h-8 items-center">y:
+                        <input id="palette-input-size-y" class="w-full m-1" />
+                    </span>
+                </div>
+            </div>
+            <div id="palette" class="grid aspect-square self-center">
+                <div class="bg-linear-to-t from-cyan-600 to-purple-400"></div>
+                <div class="bg-linear-to-t from-cyan-600 to-purple-400"></div>
+                <div class="bg-linear-to-t from-cyan-600 to-purple-400"></div>
+                <div class="bg-linear-to-t from-cyan-600 to-purple-400"></div>
+                <div class="bg-linear-to-t from-cyan-600 to-purple-400"></div>
+                <div class="bg-linear-to-t from-cyan-600 to-purple-400"></div>
+                <div class="bg-linear-to-t from-cyan-600 to-purple-400"></div>
+                <div class="bg-linear-to-t from-cyan-600 to-purple-400"></div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

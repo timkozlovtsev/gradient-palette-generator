@@ -1,0 +1,17 @@
+{
+  "dependencies": {
+    "@tailwindcss/cli": "^4.1.18",
+    "express": "^5.2.1",
+    "tailwindcss": "^4.1.18"
+  },
+  "name": "gradient-palette-generator",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "timkozlovtsev",
+  "license": "MIT",
+  "description": ""
+}
