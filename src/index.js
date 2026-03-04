@@ -17,6 +17,14 @@ app.get('/gallery', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', "gallery.html"));
 })
 
+app.get('/faq', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', "faq.html"));
+})
+
+app.use((req, res, next) => {
+  res.status(404).sendFile(path.join(__dirname, 'public', "404.html"));
+})
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 })
