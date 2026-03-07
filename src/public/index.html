@@ -9,15 +9,19 @@
 
 <body>
     <div class="flex flex-col overflow-hidden h-screen">
-        <div id="nav" class="shrink-0 flex justify-center basis-16 items-center gap-16 bg-gray-100">
-            <a href="index.html" data-enabled class="data-enabled:text-blue-700 font-semibold">Editor</a>
-            <a href="export" class="data-enabled:text-blue-700 font-semibold">Export</a>
-            <a href="gallery" class="data-enabled:text-blue-700 font-semibold">Gallery</a>
-            <a href="faq" class="data-enabled:text-blue-700 font-semibold">FAQ</a>
+        <div class="grid grid-cols-3 justify-items-center basis-16 px-2 bg-gray-100">
+            <div></div>
+            <div id="nav" class="shrink-0 flex justify-center items-center gap-16">
+                <a href="index.html" data-enabled class="data-enabled:text-blue-700 font-semibold">Editor</a>
+                <a href="export" class="data-enabled:text-blue-700 font-semibold">Export</a>
+                <a href="gallery" class="data-enabled:text-blue-700 font-semibold">Gallery</a>
+                <a href="faq" class="data-enabled:text-blue-700 font-semibold">FAQ</a>
+            </div>
+            <div></div>
         </div>
         <div id="editor" class="grow flex">
-            <div id="settings" class="h-full flex flex-col w-1/3">
-                <div class="w-64 flex gap-2 m-2">
+            <div id="settings" class="h-full flex flex-col w-1/3 pt-1 pl-1">
+                <div class="w-64 flex gap-2 m-1">
                     <div class="grow flex items-baseline rounded-xl p-2 bg-gray-100">
                         <p>Width:</p>
                         <input type="number" min="1" max="10" step="1" id="input-palette-size-x" class="w-full
@@ -29,7 +33,7 @@
                             m-1 bg-gray-200 rounded-sm p-0.5" />
                     </div>
                 </div>
-                <div class="w-64 flex flex-col rounded-xl m-2 p-2 bg-gray-100">
+                <div class="w-64 flex flex-col rounded-xl m-1 p-2 bg-gray-100">
                     <span class="mb-1">Top color</span>
                     <div id="picker1" class="aspect-square border-dashed border-2 border-gray-400 rounded-sm">
                         <!-- TODO: saturation + value picker -->
@@ -38,7 +42,7 @@
                         <!-- TODO: hue picker -->
                     </div>
                 </div>
-                <div class="w-64 flex flex-col rounded-xl m-2 p-2 bg-gray-100">
+                <div class="w-64 flex flex-col rounded-xl m-1 p-2 bg-gray-100">
                     <span class="mb-1">Bottom color</span>
                     <div id="picker2" class="aspect-square border-dashed border-2 border-gray-400 rounded-sm">
                         <!-- TODO: saturation + value picker -->
