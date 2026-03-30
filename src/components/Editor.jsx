@@ -2,7 +2,7 @@ import { useState } from 'react';
 import PaletteSizeSettings from './PaletteSizeSettings';
 import Palette from './Palette';
 import ColorPicker from './ColorPicker';
-import { hslToHex, hslToHsv, validateHex } from '../utils';
+import { hexToHsv, hslToHex, hslToHsv, validateHex } from '../utils';
 import GradientTypeSelector from './GradientTypeSelector';
 
 function Editor() {
@@ -29,8 +29,8 @@ function Editor() {
             previewCells: Array.from({ length: width * height }, () => structuredClone(defaultPaletteCell))
         }
         for (let i = 0; i < width * height; i++) {
-            obj.cells[i].top = hslToHex({ h: i * 15, s: 100, l: 80 });
-            obj.cells[i].bottom = hslToHex({ h: i * 15, s: 100, l: 40 });
+            obj.cells[i].top = hslToHsv({ h: i * 15, s: 100, l: 80 });
+            obj.cells[i].bottom = hslToHsv({ h: i * 15, s: 100, l: 40 });
         }
         obj.previewCells = structuredClone(obj.cells);
         return obj;
@@ -41,8 +41,8 @@ function Editor() {
         if (diff > 0) {
             let addend = Array.from({ length: diff }, () => structuredClone(defaultPaletteCell));
             for (let i = 0; i < diff; i++) {
-                addend[i].top = hslToHex({ h: (cells.length + i) * 15, s: 100, l: 80 });
-                addend[i].bottom = hslToHex({ h: (cells.length + i) * 15, s: 100, l: 40 });
+                addend[i].top = hslToHsv({ h: (cells.length + i) * 15, s: 100, l: 80 });
+                addend[i].bottom = hslToHsv({ h: (cells.length + i) * 15, s: 100, l: 40 });
             }
             return [...cells, ...addend];
         } else {
@@ -104,11 +104,12 @@ function Editor() {
                             };
                         });
                     }} />
-                <ColorPicker label="Top color" hex={paletteData.cells[paletteData.selectedCellIndex].top}
+                <ColorPicker label="Top color"
+                    hsv={paletteData.cells[paletteData.selectedCellIndex].top}
                     setHex={hex => {
                         setPaletteData(prev => {
-                            prev.cells[prev.selectedCellIndex].top = hex;
-                            prev.previewCells[prev.selectedCellIndex].top = hex;
+                            prev.cells[prev.selectedCellIndex].top = hexToHsv(hex);
+                            prev.previewCells[prev.selectedCellIndex].top = hexToHsv(hex);
                             return {
                                 ...prev
                             };
@@ -118,14 +119,24 @@ function Editor() {
                         hex = validateHex(hex);
                         setPaletteData(prev => {
                             if (hex) {
-                                prev.previewCells[prev.selectedCellIndex].top = hex;
+                                prev.previewCells[prev.selectedCellIndex].top = hexToHsv(hex);
                             }
                             return {
                                 ...prev
                             };
                         });
+                    }}
+                    setHsv={hsv => {
+                        setPaletteData(prev => {
+                            prev.cells[prev.selectedCellIndex].top = hsv;
+                            prev.previewCells[prev.selectedCellIndex].top = hsv;
+                            return {
+                                ...prev
+                            };
+                        });
                     }} />
-                <ColorPicker label="Bottom color" hex={paletteData.cells[paletteData.selectedCellIndex].bottom}
+                <ColorPicker label="Bottom color"
+                    hsv={paletteData.cells[paletteData.selectedCellIndex].bottom}
                     setHex={hex => {
                         setPaletteData(prev => {
                             prev.cells[prev.selectedCellIndex].bottom = hex;
@@ -141,6 +152,14 @@ function Editor() {
                             if (hex) {
                                 prev.previewCells[prev.selectedCellIndex].bottom = hex;
                             }
+                            return {
+                                ...prev
+                            };
+                        });
+                    }} setHsv={hsv => {
+                        setPaletteData(prev => {
+                            prev.cells[prev.selectedCellIndex].bottom = hsv;
+                            prev.previewCells[prev.selectedCellIndex].bottom = hsv;
                             return {
                                 ...prev
                             };

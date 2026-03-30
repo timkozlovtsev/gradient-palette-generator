@@ -2,54 +2,43 @@ import { useRef, useState, useEffect } from 'react';
 import { hexToHsv, hsvToHex, validateHex } from '../utils';
 import ColorDot from './ColorDot';
 
-function ColorPicker({ label, hex, setHex, setPreviewHex }) {
+function ColorPicker({ label, hsv, setHsv, setPreviewHsv }) {
     const saturationValueRef = useRef(null);
     const hueRef = useRef(null);
     const [isDragging, setIsDragging] = useState('none');
-    const [localHex, setLocalHex] = useState('#000000');
-    const [lastValidLocalHex, setLastValidLocalHex] = useState('#000000');
+    const [localHsv, setLocalHsv] = useState({ h: 0, s: 0, v: 0 });
 
     const handleSaturationValueDrag = (event) => {
         if (event.buttons === 1) {
             const rect = saturationValueRef.current.getBoundingClientRect();
-            let hsv = hexToHsv(hex);
+            let newHsv = hsv;
             let s = event.clientX - rect.left;
             let v = event.clientY - rect.top;
             s = Math.max(0, Math.min(s / rect.width, 1));
             v = 1 - Math.max(0, Math.min(v / rect.height, 1));
-            hsv.s = s * 100;
-            hsv.v = v * 100;
-            setLocalHex(hsvToHex(hsv));
-            setHex(hsvToHex(hsv));
+            newHsv.s = s * 100;
+            newHsv.v = v * 100;
+            setLocalHsv(newHsv);
+            setHsv(newHsv);
         }
     }
 
     const handleHueDrag = (event) => {
         if (event.buttons === 1) {
             const rect = hueRef.current.getBoundingClientRect();
-            let hsv = hexToHsv(hex);
+            let newHsv = hsv;
             let h = event.clientX - rect.left;
 
             h = Math.max(0, Math.min(h / rect.width, 1));
-            hsv.h = h * 360;
-            setLocalHex(hsvToHex(hsv));
-            setHex(hsvToHex(hsv));
+            newHsv.h = h * 360;
+            setLocalHsv(newHsv);
+            setHsv(newHsv);
         }
     }
 
     const commitHex = () => {
-        let validated = validateHex(localHex);
-        if (validated === undefined) {
-            setLocalHex(lastValidLocalHex);
-        } else {
-            setLocalHex(validated);
-            setHex(validated);
-            setLastValidLocalHex(validated);
-        }
-    }
-
-    const getRenderingHex = () => {
-        return validateHex(localHex) || lastValidLocalHex;
+        setLocalHsv(localHsv);
+        setHsv(localHsv);
     }
 
     useEffect(() => {
@@ -72,9 +61,8 @@ function ColorPicker({ label, hex, setHex, setPreviewHex }) {
     }, [isDragging]);
 
     useEffect(() => {
-        setLocalHex(hex);
-        setLastValidLocalHex(hex);
-    }, [hex]);
+        setLocalHsv(hsv);
+    }, [hsv]);
 
     return (
         <div className='gap-6 flex flex-col editor-setting'>
@@ -83,10 +71,10 @@ function ColorPicker({ label, hex, setHex, setPreviewHex }) {
                     className='p-1.5 mt-1 rounded-xl shadow-xs
                         transition-all duration-200 ease-in-out
                         inset-shadow-border hover:inset-shadow-gray-400 focus:inset-shadow-blue-400'
-                    value={localHex}
+                    value={hsvToHex(localHsv)}
                     onChange={(e) => {
-                        setLocalHex(e.target.value);
-                        setPreviewHex(e.target.value);
+                        setLocalHsv(hexToHsv(e.target.value));
+                        setPreviewHsv(hexToHsv(e.target.value));
                     }}
                     onKeyDown={(e) => {
                         if (e.key === 'Enter') {
@@ -107,16 +95,16 @@ function ColorPicker({ label, hex, setHex, setPreviewHex }) {
                 className='relative w-full aspect-square'>
                 <div className='absolute rounded-md inset-0 inset-shadow-border'
                     style={{
-                        backgroundColor: `hsl(${hexToHsv(getRenderingHex()).h}, 100%, 50%)`
+                        backgroundColor: `hsl(${localHsv.h}, 100%, 50%)`
                     }} />
                 <div className='absolute rounded-md inset-0 bg-linear-to-r from-white to-transparent' />
                 <div className='absolute rounded-md inset-0 bg-linear-to-t from-black to-transparent' />
                 <div className='absolute'
                     style={{
-                        left: `${hexToHsv(getRenderingHex()).s}%`,
-                        top: `${100 - hexToHsv(getRenderingHex()).v}%`
+                        left: `${localHsv.s}%`,
+                        top: `${100 - localHsv.v}%`
                     }}>
-                    <ColorDot hsv={hexToHsv(getRenderingHex())} isDragging={isDragging === 'saturationValue'} />
+                    <ColorDot hsv={localHsv} isDragging={isDragging === 'saturationValue'} />
                 </div>
             </div>
             <div ref={hueRef}
@@ -131,10 +119,10 @@ function ColorPicker({ label, hex, setHex, setPreviewHex }) {
                     from-[hsl(0,100%,50%)] via-[hsl(180,100%,50%)] to-[hsl(359,100%,50%)]'>
                 <div className='absolute'
                     style={{
-                        left: `${hexToHsv(getRenderingHex()).h / 360 * 100}%`,
+                        left: `${localHsv.h / 360 * 100}%`,
                         top: '50%'
                     }}>
-                    <ColorDot hsv={{ h: hexToHsv(getRenderingHex()).h, s: 100, v: 100 }} isDragging={isDragging === 'hue'} />
+                    <ColorDot hsv={{ h: localHsv.h, s: 100, v: 100 }} isDragging={isDragging === 'hue'} />
                 </div>
             </div>
         </div>

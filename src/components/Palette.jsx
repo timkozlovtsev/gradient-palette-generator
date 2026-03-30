@@ -1,3 +1,4 @@
+import { hsvToHex } from "../utils";
 
 function Palette({ paletteData, setSelectedCell }) {
     return (
@@ -15,8 +16,8 @@ function Palette({ paletteData, setSelectedCell }) {
                     <div key={index}
                         onClick={() => setSelectedCell(index)}
                         style={{
-                            '--top-color': cell.top,
-                            '--bottom-color': cell.bottom,
+                            '--top-color': hsvToHex(cell.top),
+                            '--bottom-color': hsvToHex(cell.bottom),
                             '--interpolation-mode': cell.gradientType
                         }}
                         className=
