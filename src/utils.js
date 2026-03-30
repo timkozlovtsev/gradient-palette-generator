@@ -5,6 +5,13 @@ export const clamp = (v, a, b) => {
 }
 
 export const validateHex = (hex) => {
+    let result = validateHex_internal(hex);
+    if (result) {
+        return result.toUpperCase();
+    }
+}
+
+const validateHex_internal = (hex) => {
     if (hex[0] === '#') {
         hex = hex.slice(1, hex.length);
     }

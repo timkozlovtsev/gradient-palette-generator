@@ -2,9 +2,10 @@ import { useRef, useState, useEffect } from 'react';
 import { hexToHsv, hsvToHex, validateHex } from '../utils';
 import ColorDot from './ColorDot';
 
-function ColorPicker({ label, hsv, setHsv, setPreviewHsv }) {
+function ColorPicker({ label, hsv, setHsv, setPreviewHex }) {
     const saturationValueRef = useRef(null);
     const hueRef = useRef(null);
+    const [localHex, setLocalHex] = useState('#000000');
     const [isDragging, setIsDragging] = useState('none');
     const [localHsv, setLocalHsv] = useState({ h: 0, s: 0, v: 0 });
 
@@ -19,6 +20,7 @@ function ColorPicker({ label, hsv, setHsv, setPreviewHsv }) {
             newHsv.s = s * 100;
             newHsv.v = v * 100;
             setLocalHsv(newHsv);
+            setLocalHex(hsvToHex(newHsv));
             setHsv(newHsv);
         }
     }
@@ -32,13 +34,19 @@ function ColorPicker({ label, hsv, setHsv, setPreviewHsv }) {
             h = Math.max(0, Math.min(h / rect.width, 1));
             newHsv.h = h * 360;
             setLocalHsv(newHsv);
+            setLocalHex(hsvToHex(newHsv));
             setHsv(newHsv);
         }
     }
 
     const commitHex = () => {
-        setLocalHsv(localHsv);
-        setHsv(localHsv);
+        let validated = validateHex(localHex);
+        if (validated === undefined) {
+            setLocalHex(hsvToHex(localHsv));
+        } else {
+            setLocalHex(validated);
+            setLocalHsv(hexToHsv(validated));
+        }
     }
 
     useEffect(() => {
@@ -62,6 +70,7 @@ function ColorPicker({ label, hsv, setHsv, setPreviewHsv }) {
 
     useEffect(() => {
         setLocalHsv(hsv);
+        setLocalHex(hsvToHex(hsv));
     }, [hsv]);
 
     return (
@@ -71,10 +80,10 @@ function ColorPicker({ label, hsv, setHsv, setPreviewHsv }) {
                     className='p-1.5 mt-1 rounded-xl shadow-xs
                         transition-all duration-200 ease-in-out
                         inset-shadow-border hover:inset-shadow-gray-400 focus:inset-shadow-blue-400'
-                    value={hsvToHex(localHsv)}
+                    value={localHex}
                     onChange={(e) => {
-                        setLocalHsv(hexToHsv(e.target.value));
-                        setPreviewHsv(hexToHsv(e.target.value));
+                        setLocalHex(e.target.value);
+                        setPreviewHex(e.target.value);
                     }}
                     onKeyDown={(e) => {
                         if (e.key === 'Enter') {
@@ -95,16 +104,16 @@ function ColorPicker({ label, hsv, setHsv, setPreviewHsv }) {
                 className='relative w-full aspect-square'>
                 <div className='absolute rounded-md inset-0 inset-shadow-border'
                     style={{
-                        backgroundColor: `hsl(${localHsv.h}, 100%, 50%)`
+                        backgroundColor: `hsl(${hexToHsv(localHex).h}, 100%, 50%)`
                     }} />
                 <div className='absolute rounded-md inset-0 bg-linear-to-r from-white to-transparent' />
                 <div className='absolute rounded-md inset-0 bg-linear-to-t from-black to-transparent' />
                 <div className='absolute'
                     style={{
-                        left: `${localHsv.s}%`,
-                        top: `${100 - localHsv.v}%`
+                        left: `${hexToHsv(localHex).s}%`,
+                        top: `${100 - hexToHsv(localHex).v}%`
                     }}>
-                    <ColorDot hsv={localHsv} isDragging={isDragging === 'saturationValue'} />
+                    <ColorDot hsv={hexToHsv(localHex)} isDragging={isDragging === 'saturationValue'} />
                 </div>
             </div>
             <div ref={hueRef}
@@ -119,10 +128,10 @@ function ColorPicker({ label, hsv, setHsv, setPreviewHsv }) {
                     from-[hsl(0,100%,50%)] via-[hsl(180,100%,50%)] to-[hsl(359,100%,50%)]'>
                 <div className='absolute'
                     style={{
-                        left: `${localHsv.h / 360 * 100}%`,
+                        left: `${hexToHsv(localHex).h / 360 * 100}%`,
                         top: '50%'
                     }}>
-                    <ColorDot hsv={{ h: localHsv.h, s: 100, v: 100 }} isDragging={isDragging === 'hue'} />
+                    <ColorDot hsv={{ h: hexToHsv(localHex).h, s: 100, v: 100 }} isDragging={isDragging === 'hue'} />
                 </div>
             </div>
         </div>

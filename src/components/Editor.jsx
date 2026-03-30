@@ -2,7 +2,7 @@ import { useState } from 'react';
 import PaletteSizeSettings from './PaletteSizeSettings';
 import Palette from './Palette';
 import ColorPicker from './ColorPicker';
-import { hexToHsv, hslToHex, hslToHsv, validateHex } from '../utils';
+import { hexToHsv, hslToHsv, validateHex } from '../utils';
 import GradientTypeSelector from './GradientTypeSelector';
 
 function Editor() {
@@ -106,15 +106,6 @@ function Editor() {
                     }} />
                 <ColorPicker label="Top color"
                     hsv={paletteData.cells[paletteData.selectedCellIndex].top}
-                    setHex={hex => {
-                        setPaletteData(prev => {
-                            prev.cells[prev.selectedCellIndex].top = hexToHsv(hex);
-                            prev.previewCells[prev.selectedCellIndex].top = hexToHsv(hex);
-                            return {
-                                ...prev
-                            };
-                        });
-                    }}
                     setPreviewHex={hex => {
                         hex = validateHex(hex);
                         setPaletteData(prev => {
@@ -137,15 +128,6 @@ function Editor() {
                     }} />
                 <ColorPicker label="Bottom color"
                     hsv={paletteData.cells[paletteData.selectedCellIndex].bottom}
-                    setHex={hex => {
-                        setPaletteData(prev => {
-                            prev.cells[prev.selectedCellIndex].bottom = hex;
-                            prev.previewCells[prev.selectedCellIndex].bottom = hex;
-                            return {
-                                ...prev
-                            };
-                        });
-                    }}
                     setPreviewHex={hex => {
                         hex = validateHex(hex);
                         setPaletteData(prev => {
