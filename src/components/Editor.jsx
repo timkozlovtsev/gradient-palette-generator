@@ -1,9 +1,10 @@
 import { useState } from 'react';
+import { hexToHsv, hslToHsv, validateHex } from '../utils';
 import PaletteSizeSettings from './PaletteSizeSettings';
 import Palette from './Palette';
 import ColorPicker from './ColorPicker';
-import { hexToHsv, hslToHsv, validateHex } from '../utils';
 import GradientTypeSelector from './GradientTypeSelector';
+import HowToUse from './HowToUse.jsx';
 
 function Editor() {
     const gradientTypes = [
@@ -35,6 +36,7 @@ function Editor() {
         obj.previewCells = structuredClone(obj.cells);
         return obj;
     });
+    const [showHelp, setShowHelp] = useState(false);
 
     const resizeCellsArray = (cells, width, height) => {
         let diff = width * height - cells.length;
@@ -92,8 +94,8 @@ function Editor() {
                 <span className='editor-setting font-medium inset-shadow-border'>Settings</span>
                 <PaletteSizeSettings height={paletteData.height} setHeight={setPaletteHeight}
                     width={paletteData.width} setWidth={setPaletteWidth} />
-                <GradientTypeSelector
-                    gradientTypes={gradientTypes}
+                <span className='py-px mx-2 rounded-xs bg-gray-300'></span>
+                <GradientTypeSelector gradientTypes={gradientTypes}
                     selectedGradientType={paletteData.cells[paletteData.selectedCellIndex].gradientType}
                     setSelectedGradientType={type => {
                         setPaletteData(prev => {
@@ -149,19 +151,25 @@ function Editor() {
                     }} />
             </div>
             <div className='grow flex flex-col'>
-                <div className='editor-setting'>
+                <div className='flex editor-setting justify-between'>
                     <button className='cursor-pointer px-3 py-1
                         transition-all duration-200 ease-in-out
                         shadow-xs rounded-lg inset-shadow-border hover:inset-shadow-gray-400'
                         onClick={() => { alert("Пока не реализованно") }}>
                         Save as PNG
                     </button>
+                    <button className='cursor-pointer px-3 py-1
+                        transition-all duration-200 ease-in-out
+                        shadow-xs rounded-lg inset-shadow-border hover:inset-shadow-gray-400'
+                        onClick={() => setShowHelp(true)}>
+                        How to use
+                    </button>
                 </div>
                 <div className='grow flex justify-center items-center'>
                     <Palette paletteData={paletteData} setSelectedCell={setSelectedCell} />
                 </div>
-
             </div>
+            {showHelp ? <HowToUse hide={()=>setShowHelp(false)} /> : <></>}
         </div>
     );
 }

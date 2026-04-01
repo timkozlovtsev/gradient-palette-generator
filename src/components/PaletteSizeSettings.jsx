@@ -1,7 +1,6 @@
 function PaletteSizeSettings({ height, setHeight, width, setWidth }) {
     return (
         <div className='editor-setting flex gap-1.5 inset-shadow-border'>
-
             <label className='font-medium'>Height
                 <input
                     className='w-full p-1.5 mt-1 rounded-xl shadow-xs

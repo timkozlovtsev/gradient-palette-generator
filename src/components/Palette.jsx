@@ -20,8 +20,9 @@ function Palette({ paletteData, setSelectedCell }) {
                             '--bottom-color': hsvToHex(cell.bottom),
                             '--interpolation-mode': cell.gradientType
                         }}
-                        className=
-                        'bg-[linear-gradient(in_var(--interpolation-mode)_to_top,var(--bottom-color),var(--top-color))]'
+                        className={
+                            (paletteData.selectedCellIndex === index ? 'border-2 border-white ' : '') +
+                            'bg-[linear-gradient(in_var(--interpolation-mode)_to_top,var(--bottom-color),var(--top-color))]'}
                     />
                 ))}
             </div>
