@@ -104,16 +104,16 @@ function ColorPicker({ label, hsv, setHsv, setPreviewHex }) {
                 className='relative w-full aspect-square'>
                 <div className='absolute rounded-md inset-0 inset-shadow-border'
                     style={{
-                        backgroundColor: `hsl(${hexToHsv(localHex).h}, 100%, 50%)`
+                        backgroundColor: `hsl(${localHsv.h}, 100%, 50%)`
                     }} />
                 <div className='absolute rounded-md inset-0 bg-linear-to-r from-white to-transparent' />
                 <div className='absolute rounded-md inset-0 bg-linear-to-t from-black to-transparent' />
                 <div className='absolute'
                     style={{
-                        left: `${hexToHsv(localHex).s}%`,
-                        top: `${100 - hexToHsv(localHex).v}%`
+                        left: `${localHsv.s}%`,
+                        top: `${100 - localHsv.v}%`
                     }}>
-                    <ColorDot hsv={hexToHsv(localHex)} isDragging={isDragging === 'saturationValue'} />
+                    <ColorDot hsv={localHsv} isDragging={isDragging === 'saturationValue'} />
                 </div>
             </div>
             <div ref={hueRef}
@@ -128,16 +128,14 @@ function ColorPicker({ label, hsv, setHsv, setPreviewHex }) {
                     from-[hsl(0,100%,50%)] via-[hsl(180,100%,50%)] to-[hsl(359,100%,50%)]'>
                 <div className='absolute'
                     style={{
-                        left: `${hexToHsv(localHex).h / 360 * 100}%`,
+                        left: `${localHsv.h / 360 * 100}%`,
                         top: '50%'
                     }}>
-                    <ColorDot hsv={{ h: hexToHsv(localHex).h, s: 100, v: 100 }} isDragging={isDragging === 'hue'} />
+                    <ColorDot hsv={{ h: localHsv.h, s: 100, v: 100 }} isDragging={isDragging === 'hue'} />
                 </div>
             </div>
         </div>
     );
 }
 
-
-//bg-linear-to-r/increasing from-[#ff0000] via-[#00ffff] to-[#ff0000]
 export default ColorPicker;
